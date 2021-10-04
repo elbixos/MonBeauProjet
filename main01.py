@@ -31,6 +31,8 @@ fenetre=pygame.display.set_mode((largeur,hauteur))
 # on trouvera ainsi l'image du joueur dans :
 # images["joueur"], et ainsi de suite
 # ===============================
+print("bonjour")
+
 images = lireImages()
 
 # creation des objets du jeu
