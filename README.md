@@ -1,2 +1,3 @@
 # MonBeauProjet
-une démo
+
+une démo de git pour débuter...
