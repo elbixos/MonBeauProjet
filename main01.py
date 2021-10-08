@@ -64,8 +64,6 @@ while continuer == True :
     # on ajoute des balles toutes les 1 secondes.
     ajouterBalles(balles, time, fps, 1)
 
-    for b in balles:
-        b.deplacer()
 
 
     # Affichage des elements
