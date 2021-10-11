@@ -1,5 +1,18 @@
 import pygame
 
+class ElementGraphique():
+    def __init__(self, img, fen, x=0, y=0):
+        self.image = img
+        self.rect= self.image.get_rect()
+        self.fenetre = fen
+
+        # creation d'un rectangle pour positioner l'image du personnage
+        self.rect.x = x
+        self.rect.y = y
+
+    def afficher(self):
+        self.fenetre.blit(self.image, self.rect)
+
 # Initialisation de la bibliotheque pygame
 pygame.init()
 
@@ -10,23 +23,22 @@ fenetre=pygame.display.set_mode((largeur,hauteur))
 
 
 # lecture de l'image du perso
-imagePerso = pygame.image.load("perso.png").convert_alpha()
 
-# creation d'un rectangle pour positioner l'image du personnage
-rectPerso = imagePerso.get_rect()
-rectPerso.x = 60
-rectPerso.y = 80
+perso = ElementGraphique(pygame.image.load("perso.png").convert_alpha(), fenetre, x=60, y=80)
 
-rectPerso2 = imagePerso.get_rect()
 
+perso2 = ElementGraphique(pygame.image.load("perso.png").convert_alpha(), fenetre)
 
 # lecture de l'image du fond
-imageFond = pygame.image.load("background.jpg").convert()
+fond = ElementGraphique(pygame.image.load("background.jpg").convert_alpha(),fenetre)
 
-# creation d'un rectangle pour positioner l'image du fond
-rectFond = imageFond.get_rect()
-rectFond.x = 0
-rectFond.y = 0
+## Ajoutons un texte fixe dans la fenetre :
+# Choix de la police pour le texte
+font = pygame.font.Font(None, 34)
+
+# Creation de l'image correspondant au texte
+texte = ElementGraphique(font.render('dot biten', True, (3, 45, 49)), fenetre, x=10, y=10)
+
 
 # servira a regler l'horloge du jeu
 horloge = pygame.time.Clock()
@@ -52,27 +64,23 @@ while continuer:
     if touches[pygame.K_ESCAPE] :
         continuer=0
 
+    perso2.rect.x += 5
+    perso2.rect.y += 5
+
     if touches[pygame.K_RIGHT] :
-        rectPerso.x += 5
-
-    if touches[pygame.K_LEFT] :
-        rectPerso.x += -5
-
-    if touches[pygame.K_UP] :
-        rectPerso.y += -5
-
-    rectPerso2.x += 2
-    rectPerso2.y += 5
+        perso.rect.x += 5
 
 
     # Affichage du fond
-    fenetre.blit(imageFond, rectFond)
+    fond.afficher()
 
     # Affichage Perso
-    fenetre.blit(imagePerso, rectPerso)
+    perso.afficher()
 
-    fenetre.blit(imagePerso, rectPerso2)
+    perso2.afficher()
 
+    # Affichage du Texte
+    texte.afficher()
 
     # rafraichissement
     pygame.display.flip()

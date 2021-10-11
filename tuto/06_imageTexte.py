@@ -30,7 +30,7 @@ rectFond.y = 0
 font = pygame.font.Font(None, 34)
 
 # Creation de l'image correspondant au texte
-imageText = font.render('<Escape> pour quitter', True, (255, 255, 255))
+imageText = font.render('dot biten', True, (3, 45, 49))
 
 # creation d'un rectangle pour positioner l'image du texte
 rectText = imageText.get_rect()

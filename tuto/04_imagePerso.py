@@ -19,6 +19,8 @@ rectPerso.x = 100
 rectPerso.y = 200
 print(rectPerso)
 
+rectPerso2 = imagePerso.get_rect()
+
 # servira a regler l'horloge du jeu
 horloge = pygame.time.Clock()
 
@@ -52,8 +54,13 @@ while continuer:
     if touches[pygame.K_UP] :
         rectPerso.y += -5
 
+    rectPerso2.x += 2
+    rectPerso2.y += 5
+
     # Affichage Perso
     fenetre.blit(imagePerso, rectPerso)
+
+    fenetre.blit(imagePerso, rectPerso2)
 
     # rafraichissement
     pygame.display.flip()
