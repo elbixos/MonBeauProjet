@@ -1,4 +1,5 @@
 from toutBiten import *
+
 import pygame
 import random
 
