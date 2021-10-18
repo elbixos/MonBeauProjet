@@ -15,6 +15,32 @@ def lire_images():
     for i in range(4):
       imageBank["flame"].append(pygame.image.load("flameBall_"+str(i)+".png").convert_alpha())
 
+      imageBank["wizard"] = {}
+
+      imageBank["wizard"]["droite"]=[]
+      for i in range(3):
+          image = pygame.image.load("wizard_right_"+str(i)+".png").convert_alpha()
+          image = pygame.transform.scale(image, (48, 48))
+          imageBank["wizard"]["droite"].append(image)
+
+      imageBank["wizard"]["gauche"]=[]
+      for i in range(3):
+          image = pygame.image.load("wizard_left_"+str(i)+".png").convert_alpha()
+          image = pygame.transform.scale(image, (48, 48))
+          imageBank["wizard"]["gauche"].append(image)
+
+      imageBank["wizard"]["haut"]=[]
+      for i in range(3):
+          image = pygame.image.load("wizard_up_"+str(i)+".png").convert_alpha()
+          image = pygame.transform.scale(image, (48, 48))
+          imageBank["wizard"]["haut"].append(image)
+
+      imageBank["wizard"]["bas"]=[]
+      for i in range(3):
+          image = pygame.image.load("wizard_down_"+str(i)+".png").convert_alpha()
+          image = pygame.transform.scale(image, (48, 48))
+          imageBank["wizard"]["bas"].append(image)
+
 
     return imageBank
 
@@ -67,35 +93,6 @@ class ElementGraphique():
         return False
 
 
-class Joueur(ElementGraphique):
-    def __init__(self, img, fen, x=0, y=0):
-        super().__init__(img,fen,x,y)
-
-        self.vitesse = 5
-
-    def deplacer(self):
-        # on recupere l'etat du clavier
-        touches = pygame.key.get_pressed();
-
-        new_rect = copy.deepcopy(self.rect)
-
-        if touches[pygame.K_RIGHT] :
-            new_rect.x += self.vitesse
-
-        if touches[pygame.K_LEFT] :
-            new_rect.x += -self.vitesse
-
-        if touches[pygame.K_UP] :
-            new_rect.y += -self.vitesse
-
-        if touches[pygame.K_DOWN] :
-            new_rect.y += self.vitesse
-
-        if collide_map(maMap,new_rect):
-            print("Deplacement refusé")
-        else :
-            print("Deplacement accepté")
-            self.rect = new_rect
 
 class ElementAnime(ElementGraphique):
     def __init__(self, images, fen, x=0, y=0):
@@ -116,6 +113,60 @@ class ElementAnime(ElementGraphique):
             self.image=self.images[self.num_image]
 
         super().afficher()
+
+class ElementAnimeDir(ElementAnime):
+    def __init__(self, images, fen, x=0, y=0):
+        self.dico_images = images
+        self.direction = "bas"
+        self.old_direction = "bas"
+
+
+        super().__init__(images[self.direction],fen, x,y)
+
+    def afficher(self):
+        if self.direction == self.old_direction :
+            super().afficher()
+        else :
+            self.images = self.dico_images[self.direction]
+            self.num_image = 0
+            self.old_direction = self.direction
+            super().afficher()
+
+
+class Joueur(ElementAnimeDir):
+    def __init__(self, img, fen, x=0, y=0):
+        super().__init__(img,fen,x,y)
+
+        self.vitesse = 5
+
+    def deplacer(self):
+        # on recupere l'etat du clavier
+        touches = pygame.key.get_pressed();
+
+        new_rect = copy.deepcopy(self.rect)
+
+        if touches[pygame.K_RIGHT] :
+            self.direction = "droite"
+            new_rect.x += self.vitesse
+
+        if touches[pygame.K_LEFT] :
+            self.direction = "gauche"
+            new_rect.x += -self.vitesse
+
+        if touches[pygame.K_UP] :
+            self.direction = "haut"
+            new_rect.y += -self.vitesse
+
+        if touches[pygame.K_DOWN] :
+            self.direction = "bas"
+            new_rect.y += self.vitesse
+
+
+        if collide_map(maMap,new_rect):
+            print("Deplacement refusé")
+        else :
+            print("Deplacement accepté")
+            self.rect = new_rect
 
 
 class Balle(ElementAnime):
@@ -163,7 +214,7 @@ imageBank = lire_images()
 
 # lecture de l'image du perso
 
-perso = Joueur(imageBank["perso"], fenetre, x=60, y=80)
+perso = Joueur(imageBank["wizard"], fenetre, x=60, y=80)
 
 
 mes_balles = []
@@ -204,10 +255,6 @@ while continuer:
     i=i+1
     #print (i)
 
-    '''
-    if i > 100:
-        perso.vitesse = 15
-    '''
 
     # on recupere l'etat du clavier
     touches = pygame.key.get_pressed();
